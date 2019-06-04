@@ -7,21 +7,20 @@ $(document).ready(function () {
 
     function initPage() {
         articleContainer.empty();
-        $.get("api/headlines?saved=false")
-            .then(function (data) {
-                if (data && data.length) {
-                    renderArticles(data);
-                }
-                else {
-                    renderEnpty();
-                }
-            });
+        $.get("api/headlines?saved=false").then(function (data) {
+            if (data && data.length) {
+                renderArticles(data);
+            }
+            else {
+                renderEnpty();
+            }
+        });
     }
 
     function renderArticles(articles) {
         var articlePanels = [];
         for (var i = 0; i < articles.length; i++) {
-            articlePanel.push(createPanel(articles[i]));
+            articlePanels.push(createPanel(articles[i]));
             articleContainer.append(articlePanels);
         }
     }
@@ -42,8 +41,8 @@ $(document).ready(function () {
                 "</div>",
                 "</div>"
             ].join(""));
-            panel.data("_id", article._id);
-            return panel;
+        panel.data("_id", article._id);
+        return panel;
     }
 
     function renderEnpty() {
@@ -64,7 +63,7 @@ $(document).ready(function () {
         articleContainer.append(emptyAlert);
     }
 
-    function handleArticleSave(){
+    function handleArticleSave() {
         var articleToSave = $(this).parents(".panel").data();
         articleToSave.saved = true;
 
@@ -72,9 +71,8 @@ $(document).ready(function () {
             method: "PATCH",
             url: "api/headlines",
             data: articleToSave
-        })
-        .then(function(data){
-            if(data.ok) {
+        }).then(function (data) {
+            if (data.ok) {
                 initPage();
             }
         });
@@ -82,9 +80,9 @@ $(document).ready(function () {
 
     function handleArticleScrape() {
         $.get("api/fetch")
-        .then(function(data){
-            initPage();
-            bootbox.alert("<h3 class='text-center m-top-80'>" + data.message + "</h3>");
-        })
+            .then(function (data) {
+                initPage();
+                bootbox.alert("<h3 class='text-center m-top-80'>" + data.message + "</h3>");
+            });
     }
-})
+});
